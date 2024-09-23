@@ -3,29 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Search</title>
     <link rel="stylesheet" href="/styles.css">
-    <title>GUI-library</title>
 </head>
 <body>
-    <h1>Available Books</h1>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Action</th>
-        </tr>
-        <% books.forEach(book => { %>
+    <h1>Library Books</h1>
+    
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="Search for books..." onkeyup="filterBooks()">
+        <button type="submit">Search</button>
+    </form>
+
+    <table id="booksTable">
+        <thead>
             <tr>
-                <td><%= book.id %></td>
-                <td><%= book.title %></td>
-                <td>
-                    <form action="/borrow" method="POST">
-                        <input type="hidden" name="bookId" value="<%= book.id %>">
-                        <button type="submit">Borrow</button>
-                    </form>
-                </td>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Availability</th>
+                <th>Action</th>
             </tr>
-        <% }) %>
+        </thead>
+        <tbody>
+            <% books.forEach(book => { %>
+                <tr class="book-row <%= book.available ? 'available' : 'unavailable' %>">
+                    <td><%= book.id %></td>
+                    <td><%= book.title %></td>
+                    <td><%= book.available ? 'Available' : 'Not Available' %></td>
+                    <td>
+                        <form action="/borrow" method="POST">
+                            <input type="hidden" name="bookId" value="<%= book.id %>">
+                            <button type="submit" <% if (!book.available) { %> disabled <% } %>>Borrow</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
     </table>
+
+    <script>
+        function filterBooks() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('booksTable');
+            const rows = table.getElementsByClassName('book-row');
+
+            for (let i = 0; i < rows.length; i++) {
+                const titleCell = rows[i].getElementsByTagName('td')[1]; // Get the title cell
+                if (titleCell) {
+                    const titleValue = titleCell.textContent || titleCell.innerText;
+                    rows[i].style.display = titleValue.toLowerCase().includes(filter) ? '' : 'none';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
