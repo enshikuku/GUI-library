@@ -7,54 +7,119 @@
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Library Books</h1>
+    <header>
+        <h1>GUI_LIB</h1>
+        <nav>
+            <a href="/">Library</a>
+            <% if (userId) { %>
+                <a class="logout-link" href="/logout">Logout</a>
+            <% } else { %>
+                <a class="login-link" href="/login">Login</a>
+                <a class="register-link" href="/register">Register</a>
+            <% } %>
+        </nav>
+    </header>
+    <div  class="library-page">
+        <h1 class="library-heading">Library Books</h1>
+        
+        <form id="searchForm" class="search-form" onsubmit="event.preventDefault(); filterBooks();">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search for books..." onkeyup="filterBooks()">
+            <button class="search-button" type="submit">Search</button>
+        </form>
     
-    <form id="searchForm">
-        <input type="text" id="searchInput" placeholder="Search for books..." onkeyup="filterBooks()">
-        <button type="submit">Search</button>
-    </form>
-
-    <table id="booksTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Availability</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% books.forEach(book => { %>
-                <tr class="book-row <%= book.available ? 'available' : 'unavailable' %>">
-                    <td><%= book.id %></td>
-                    <td><%= book.title %></td>
-                    <td><%= book.available ? 'Available' : 'Not Available' %></td>
-                    <td>
-                        <form action="/borrow" method="POST">
-                            <input type="hidden" name="bookId" value="<%= book.id %>">
-                            <button type="submit" <% if (!book.available) { %> disabled <% } %>>Borrow</button>
-                        </form>
-                    </td>
+        <table id="booksTable" class="books-table">
+            <thead class="table-head">
+                <tr class="table-row-header">
+                    <th class="table-header">ID</th>
+                    <th class="table-header">Title</th>
+                    <th class="table-header">Availability</th>
+                    <th class="table-header">Action</th>
                 </tr>
-            <% }); %>
-        </tbody>
-    </table>
-
-    <script>
-        function filterBooks() {
-            const input = document.getElementById('searchInput');
-            const filter = input.value.toLowerCase();
-            const table = document.getElementById('booksTable');
-            const rows = table.getElementsByClassName('book-row');
-
-            for (let i = 0; i < rows.length; i++) {
-                const titleCell = rows[i].getElementsByTagName('td')[1]; // Get the title cell
-                if (titleCell) {
-                    const titleValue = titleCell.textContent || titleCell.innerText;
-                    rows[i].style.display = titleValue.toLowerCase().includes(filter) ? '' : 'none';
+            </thead>
+            <tbody class="table-body">
+                <% books.forEach(book => { %>
+                    <tr class="book-row <%= book.available ? 'available' : 'unavailable' %>" data-id="<%= book.id %>">
+                        <td class="book-id"><%= book.id %></td>
+                        <td class="book-title"><%= book.title %></td>
+                        <td class="book-availability"><%= book.available ? 'Available' : 'Not Available' %></td>
+                        <td class="book-action">
+                            <% if (book.available) { %>
+                                <button class="borrow-button" onclick="borrowBook(<%= book.id %>)">Borrow</button>
+                            <% } else { %>
+                                <button class="return-button" onclick="returnBook(<%= book.id %>)">Return</button>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    
+        <script>
+            function filterBooks() {
+                const input = document.getElementById('searchInput');
+                const filter = input.value.toLowerCase();
+                const table = document.getElementById('booksTable');
+                const rows = table.getElementsByClassName('book-row');
+    
+                for (let i = 0; i < rows.length; i++) {
+                    const titleCell = rows[i].getElementsByTagName('td')[1]; // Get the title cell
+                    if (titleCell) {
+                        const titleValue = titleCell.textContent || titleCell.innerText;
+                        rows[i].style.display = titleValue.toLowerCase().includes(filter) ? '' : 'none';
+                    }
                 }
             }
-        }
-    </script>
+    
+            async function borrowBook(bookId) {
+                const response = await fetch('/borrow', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ bookId }),
+                });
+    
+                if (response.ok) {
+                    updateBookStatus(bookId, false);
+                }
+            }
+    
+            async function returnBook(bookId) {
+                const response = await fetch('/return', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ bookId }),
+                });
+    
+                if (response.ok) {
+                    updateBookStatus(bookId, true);
+                }
+            }
+    
+            function updateBookStatus(bookId, isAvailable) {
+                const rows = document.querySelectorAll('.book-row');
+                rows.forEach(row => {
+                    if (row.dataset.id == bookId) {
+                        const availabilityCell = row.cells[2];
+                        const actionCell = row.cells[3];
+    
+                        if (isAvailable) {
+                            availabilityCell.textContent = 'Available';
+                            actionCell.innerHTML = `<button onclick="borrowBook(${bookId})">Borrow</button>`;
+                            row.classList.remove('unavailable');
+                            row.classList.add('available');
+                        } else {
+                            availabilityCell.textContent = 'Not Available';
+                            actionCell.innerHTML = `<button onclick="returnBook(${bookId})">Return</button>`;
+                            row.classList.remove('available');
+                            row.classList.add('unavailable');
+                        }
+                    }
+                });
+            }
+        </script>
+    </div>
 </body>
 </html>
