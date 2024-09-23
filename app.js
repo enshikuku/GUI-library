@@ -34,15 +34,20 @@ app.set('view engine', 'ejs');
 
 // Routes
 app.get('/', async (req, res) => {
+    const searchTerm = req.query.search || '';
+    const query = `SELECT * FROM books WHERE title LIKE ?`;
+    const values = [`%${searchTerm}%`];
+
     try {
-        db.query('SELECT * FROM books WHERE available = TRUE', (err, results) => {
+        db.query(query, values, (err, results) => {
             if (err) throw err;
-            res.render('index', { books: results });
+            res.render('index', { books: results, searchTerm });
         });
     } catch (error) {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 app.post('/borrow', async (req, res) => {
     const bookId = req.body.bookId;
