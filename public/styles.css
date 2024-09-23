@@ -1,89 +1,232 @@
-/* General body styling */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 20px;
+* {
+    margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Header styling */
-h1 {
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+.library-page {
+    padding: 20px;
+}
+
+header {
+    background-color: #007bff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+header h1 {
+    font-size: 24px;
+    margin: 0;
+    font-weight: bold;
+}
+
+header nav {
+    display: flex;
+    gap: 15px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+header nav a:hover {
+    background-color: #0056b3;
+}
+
+header .logout-link {
+    background-color: #dc3545;
+}
+
+header .logout-link:hover {
+    background-color: #c82333;
+}
+
+header .login-link,
+header .register-link {
+    background-color: #28a745;
+}
+
+header .login-link:hover,
+header .register-link:hover {
+    background-color: #218838;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+
+.library-heading {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* Search form styling */
-form {
+.search-form {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
 }
 
-/* Search input styling */
-input[type="text"] {
-    width: 300px; /* Width of the search bar */
-    padding: 10px; /* Padding inside the search bar */
-    border: 1px solid #ccc; /* Border style */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+.search-input {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Search button styling */
-button {
-    padding: 10px 15px; /* Padding inside the button */
-    margin-left: 10px; /* Space between input and button */
-    background-color: #007bff; /* Button background color */
-    color: white; /* Text color */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 16px; /* Font size */
-    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+.search-button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Button hover effect */
-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    transform: scale(1.05); /* Slightly enlarge on hover */
+.search-button:hover {
+    background-color: #0056b3;
 }
 
-/* Table styling */
-table {
-    width: 100%; /* Full width */
-    border-collapse: collapse; /* Collapse borders */
-    margin-top: 20px; /* Space above table */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    background-color: white; /* White background for the table */
+.books-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
-/* Table header styling */
-th {
-    background-color: #007bff; /* Header background color */
-    color: white; /* Header text color */
-    padding: 12px; /* Cell padding */
+.table-header {
+    background-color: #007bff;
+    color: white;
+    padding: 12px;
 }
 
-/* Table cell styling */
-th, td {
-    padding: 12px; /* Cell padding */
-    text-align: left; /* Align text to the left */
-    border-bottom: 1px solid #ddd; /* Bottom border for cells */
+.book-row {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s;
 }
 
 .available {
-    background-color: #d4edda; /* Light green for available */
+    background-color: #d4edda;
 }
 
 .unavailable {
-    background-color: #f8d7da; /* Light red for unavailable */
+    background-color: #f8d7da;
 }
 
-.available:hover {
-    background-color: rgba(212, 237, 218, 0.6); /* Light green for available */
+.book-row:hover {
+    background-color: #e9ecef;
 }
 
-.unavailable:hover {
-    background-color: rgba(248, 215, 218, 0.6); /* Light red for unavailable */
+.borrow-button,
+.return-button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.borrow-button:hover,
+.return-button:hover {
+    background-color: #0056b3;
+}
+
+.form-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.form-button:hover {
+    background-color: #0056b3;
+}
+
+.form-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.form-link a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form-link a:hover {
+    text-decoration: underline;
 }
