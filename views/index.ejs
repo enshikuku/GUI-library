@@ -19,7 +19,7 @@
             <% } %>
         </nav>
     </header>
-    <div  class="library-page">
+    <div class="library-page">
         <h1 class="library-heading">Library Books</h1>
         
         <form id="searchForm" class="search-form" onsubmit="event.preventDefault(); filterBooks();">
@@ -44,9 +44,9 @@
                         <td class="book-availability"><%= book.available ? 'Available' : 'Not Available' %></td>
                         <td class="book-action">
                             <% if (book.available) { %>
-                                <button class="borrow-button" onclick="borrowBook(<%= book.id %>)">Borrow</button>
+                                <button class="borrow-button" onclick="borrowBook('<%= book.id %>')">Borrow</button>
                             <% } else { %>
-                                <button class="return-button" onclick="returnBook(<%= book.id %>)">Return</button>
+                                <button class="return-button" onclick="returnBook('<%= book.id %>')">Return</button>
                             <% } %>
                         </td>
                     </tr>
@@ -62,7 +62,7 @@
                 const rows = table.getElementsByClassName('book-row');
     
                 for (let i = 0; i < rows.length; i++) {
-                    const titleCell = rows[i].getElementsByTagName('td')[1]; // Get the title cell
+                    const titleCell = rows[i].getElementsByTagName('td')[1];
                     if (titleCell) {
                         const titleValue = titleCell.textContent || titleCell.innerText;
                         rows[i].style.display = titleValue.toLowerCase().includes(filter) ? '' : 'none';
@@ -104,15 +104,18 @@
                     if (row.dataset.id == bookId) {
                         const availabilityCell = row.cells[2];
                         const actionCell = row.cells[3];
+                        const button = actionCell.querySelector('button'); // Select the existing button
     
                         if (isAvailable) {
                             availabilityCell.textContent = 'Available';
-                            actionCell.innerHTML = `<button onclick="borrowBook(${bookId})">Borrow</button>`;
+                            button.textContent = 'Borrow'; // Update button text
+                            button.setAttribute('onclick', `borrowBook(${bookId})`); // Update button action
                             row.classList.remove('unavailable');
                             row.classList.add('available');
                         } else {
                             availabilityCell.textContent = 'Not Available';
-                            actionCell.innerHTML = `<button onclick="returnBook(${bookId})">Return</button>`;
+                            button.textContent = 'Return'; // Update button text
+                            button.setAttribute('onclick', `returnBook(${bookId})`); // Update button action
                             row.classList.remove('available');
                             row.classList.add('unavailable');
                         }
