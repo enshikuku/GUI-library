@@ -8,6 +8,17 @@
     <link rel="shortcut icon" href="book.png" type="image/x-icon">
 </head>
 <body class="registration-page">
+    <header>
+        <a href="/" class="h1">GUI_LIB</a>
+        <nav>
+            <a href="/">Library</a>
+            <% if (userId) { %>
+                <a class="logout-link" href="/logout">Logout</a>
+            <% } else { %>
+                <a class="login-link" href="/login">Login</a>
+            <% } %>
+        </nav>
+    </header>
     <div class="form-container">
         <h2 class="form-heading">Register</h2>
         <form class="registration-form" action="/register" method="POST">

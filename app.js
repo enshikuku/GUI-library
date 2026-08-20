@@ -41,11 +41,11 @@ app.use(session({
 }));
 
 app.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', { userId: req.session.userId });
 });
 
 app.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register', { userId: req.session.userId });
 });
 
 // User registration
